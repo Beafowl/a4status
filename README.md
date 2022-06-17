@@ -1,2 +1,7 @@
-# a4status
-API Server for checking A4 status in NosTale
+Prerequisites for the image:
+* Resolution has to be 1024x768
+* Image needs to contain the game only
+
+Prerequisites for the server:
+* python
+* tesseract
