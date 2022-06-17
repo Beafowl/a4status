@@ -3,5 +3,4 @@ Prerequisites for the image:
 * Image needs to contain the game only
 
 Prerequisites for the server:
-* python
-* tesseract
+* pythons
