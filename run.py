@@ -7,11 +7,12 @@ import threading
 import time
 from datetime import datetime
 import cv2
+import asyncio
 
 config = load_dotenv(find_dotenv())
 client = discord.Client()
 
-channel_to_notify = str(os.environ.get("CHANNEL"))
+channel_id = str(os.environ.get("CHANNEL"))
 
 angels_raid_timestamp = datetime.now()
 demons_raid_timestamp = datetime.now()
@@ -19,7 +20,7 @@ demons_raid_timestamp = datetime.now()
 # 216000 seconds = 1 hour
 # 108000 seconds = 30 minutes
 # 180000 seconds = 50 minutes
-async def check_for_raid_angels():
+async def check_for_raid_angels(channel):
 
     while True:
         with mss() as sct:
@@ -28,7 +29,6 @@ async def check_for_raid_angels():
             if a == -1:
                 print("Raid")
                 # send notification to discord server
-                channel = client.get_channel(channel_to_notify)
                 await channel.send("Engel haben jetzt Raid!")
                 angels_raid_timestamp = datetime.now()
                 time.sleep(216000)
@@ -36,8 +36,9 @@ async def check_for_raid_angels():
             else:
                 print("Currently checking for angels raid.. it is at " + str(a) + "%")
         time.sleep(60)
+    return True
 
-async def check_for_raid_demons():
+async def check_for_raid_demons(channel):
 
     while True:
         with mss() as sct:
@@ -46,7 +47,6 @@ async def check_for_raid_demons():
             if d == -1:
                 print("Raid")
                 # send notification to discord server
-                channel = client.get_channel(channel_to_notify)
                 await channel.send("Dämonen haben jetzt Raid!")
                 demons_raid_timestamp = datetime.now()
                 time.sleep(216000)
@@ -54,10 +54,32 @@ async def check_for_raid_demons():
             else:
                 print("Currently checking for demons raid.. it is at " + str(d) + "%")
         time.sleep(60)
+    return True
 
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+
+    # get channel
+    channel = await client.fetch_channel(channel_id)
+
+    # init threads
+    #t_angels = threading.Thread(target=check_for_raid_angels, args=(channel,))
+    #t_angels.start()
+
+    #t_demons = threading.Thread(target=check_for_raid_demons, args=(channel,))
+    #t_demons.start()
+
+    #asyncio.run(check_for_raid_angels(channel))
+    #asyncio.run(check_for_raid_demons(channel))
+    
+    task1 = asyncio.create_task(check_for_raid_demons(channel))
+    task2 = asyncio.create_task(check_for_raid_angels(channel))
+
+    #await task2
+
+    #await check_for_raid_angels(channel)
+    #await check_for_raid_demons(channel)
 
 @client.event
 async def on_message(message):
@@ -100,11 +122,5 @@ async def on_message(message):
 
         cv2.imwrite("./output/debug.png", con)
         await message.channel.send(file=discord.File('./output/debug.png'))
-
-t_angels = threading.Thread(target=check_for_raid_angels)
-t_angels.start()
-
-t_demons = threading.Thread(target=check_for_raid_demons)
-t_demons.start()
 
 client.run(os.environ.get("TOKEN"))
