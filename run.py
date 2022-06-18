@@ -3,8 +3,6 @@ from detect import angel_status, demon_status
 import os
 from dotenv import load_dotenv, find_dotenv
 from mss import mss
-import threading
-import time
 from datetime import datetime
 from datetime import timedelta
 import cv2
@@ -15,9 +13,6 @@ config = load_dotenv(find_dotenv())
 client = discord.Client()
 
 channel_id = str(os.environ.get("CHANNEL"))
-
-angels_raid_timestamp = datetime.now()
-demons_raid_timestamp = datetime.now()
 
 # 216000 seconds = 1 hour
 # 108000 seconds = 30 minutes
@@ -46,6 +41,12 @@ async def on_ready():
     demons_have_raid = False
     angels_have_raid = False
 
+    global angels_raid_timestamp
+    global demons_raid_timestamp
+
+    angels_raid_timestamp = datetime.now()
+    demons_raid_timestamp = datetime.now()
+
     while True:
         await asyncio.sleep(29) 
 
@@ -63,7 +64,7 @@ async def on_ready():
             await channel.send("Engel haben Raid!")
 
         if not check_for_raid_angels():
-            angels_have_raid = False   
+            angels_have_raid = False
 
 @client.event
 async def on_message(message):
@@ -77,18 +78,12 @@ async def on_message(message):
             angels_text = ""
 
             if a == -1:
-                angels_text = f"""Die Engel haben gerade Raid!\n
-                Es hat um {angels_raid_timestamp.strftime("%H:%M")} angefangen.
-                Der Raid öffnet um {(angels_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},
-                und man hat bis {(angels_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
+                angels_text = f"""Die Engel haben gerade Raid!\n\nEs hat um {angels_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(angels_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(angels_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 angels_text = "Die Engel sind bei " + str(a) + "%."
 
             if d == -1:
-                demons_text = f"""Die Dämonen haben gerade Raid!\n
-                Es hat um {demons_raid_timestamp.strftime("%H:%M:%S")} angefangen.
-                Der Raid öffnet um {(demons_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},
-                und man hat bis {(demons_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
+                demons_text = f"""Die Dämonen haben gerade Raid!\n\nEs hat um {demons_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(demons_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(demons_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
 
