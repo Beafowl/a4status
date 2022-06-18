@@ -6,8 +6,10 @@ from mss import mss
 import threading
 import time
 from datetime import datetime
+from datetime import timedelta
 import cv2
 import asyncio
+
 
 config = load_dotenv(find_dotenv())
 client = discord.Client()
@@ -20,41 +22,19 @@ demons_raid_timestamp = datetime.now()
 # 216000 seconds = 1 hour
 # 108000 seconds = 30 minutes
 # 180000 seconds = 50 minutes
-async def check_for_raid_angels(channel):
+def check_for_raid_angels():
 
-    while True:
-        with mss() as sct:
-            sct.shot(output="screenshot_angel.png")
-            a = angel_status("./screenshot_angel.png")
-            if a == -1:
-                print("Raid")
-                # send notification to discord server
-                await channel.send("Engel haben jetzt Raid!")
-                angels_raid_timestamp = datetime.now()
-                time.sleep(216000)
-                continue
-            else:
-                print("Currently checking for angels raid.. it is at " + str(a) + "%")
-        time.sleep(60)
-    return True
+    with mss() as sct:
+        sct.shot(output="screenshot_angel.png")
+        a = angel_status("./screenshot_angel.png")
+        return a == -1
 
-async def check_for_raid_demons(channel):
+def check_for_raid_demons():
 
-    while True:
-        with mss() as sct:
-            sct.shot(output="screenshot_demon.png")
-            d = demon_status("./screenshot_demon.png")
-            if d == -1:
-                print("Raid")
-                # send notification to discord server
-                await channel.send("Dämonen haben jetzt Raid!")
-                demons_raid_timestamp = datetime.now()
-                time.sleep(216000)
-                continue
-            else:
-                print("Currently checking for demons raid.. it is at " + str(d) + "%")
-        time.sleep(60)
-    return True
+    with mss() as sct:
+        sct.shot(output="screenshot_demon.png")
+        d = demon_status("./screenshot_demon.png")
+        return d == -1
 
 @client.event
 async def on_ready():
@@ -63,23 +43,27 @@ async def on_ready():
     # get channel
     channel = await client.fetch_channel(channel_id)
 
-    # init threads
-    #t_angels = threading.Thread(target=check_for_raid_angels, args=(channel,))
-    #t_angels.start()
+    demons_have_raid = False
+    angels_have_raid = False
 
-    #t_demons = threading.Thread(target=check_for_raid_demons, args=(channel,))
-    #t_demons.start()
+    while True:
+        await asyncio.sleep(29) 
 
-    #asyncio.run(check_for_raid_angels(channel))
-    #asyncio.run(check_for_raid_demons(channel))
-    
-    task1 = asyncio.create_task(check_for_raid_demons(channel))
-    task2 = asyncio.create_task(check_for_raid_angels(channel))
+        if check_for_raid_demons() and not demons_have_raid:
+            demons_have_raid = True
+            demons_raid_timestamp = datetime.now()
+            await channel.send("Dämonen haben Raid!")
 
-    #await task2
+        if not check_for_raid_demons():
+            demons_have_raid = False
 
-    #await check_for_raid_angels(channel)
-    #await check_for_raid_demons(channel)
+        if check_for_raid_angels() and not angels_have_raid:
+            angels_have_raid = True
+            angels_raid_timestamp = datetime.now()
+            await channel.send("Engel haben Raid!")
+
+        if not check_for_raid_angels():
+            angels_have_raid = False   
 
 @client.event
 async def on_message(message):
@@ -93,12 +77,18 @@ async def on_message(message):
             angels_text = ""
 
             if a == -1:
-                angels_text = "Die Engel haben gerade Raid! Es hat um " + angels_raid_timestamp.strftime("%H:%M:%S") + " angefangen."
+                angels_text = f"""Die Engel haben gerade Raid!\n
+                Es hat um {angels_raid_timestamp.strftime("%H:%M")} angefangen.
+                Der Raid öffnet um {(angels_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},
+                und man hat bis {(angels_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 angels_text = "Die Engel sind bei " + str(a) + "%."
 
             if d == -1:
-                demons_text = "Die Dämonen haben gerade Raid!"
+                demons_text = f"""Die Dämonen haben gerade Raid!\n
+                Es hat um {demons_raid_timestamp.strftime("%H:%M:%S")} angefangen.
+                Der Raid öffnet um {(demons_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},
+                und man hat bis {(demons_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
 
@@ -123,4 +113,5 @@ async def on_message(message):
         cv2.imwrite("./output/debug.png", con)
         await message.channel.send(file=discord.File('./output/debug.png'))
 
-client.run(os.environ.get("TOKEN"))
+if __name__ == "__main__":
+    client.run(os.environ.get("TOKEN"))
