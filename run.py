@@ -1,5 +1,5 @@
 import discord
-from detect import angel_status, demon_status
+from detect import angel_status, demon_status, detect_raid_angel
 import os
 from dotenv import load_dotenv, find_dotenv
 from mss import mss
@@ -57,23 +57,31 @@ async def on_ready():
         print(f"Demons: {str(check_d)}")
         print(f"Angels: {str(check_a)}")
 
-        if check_d and not demons_have_raid:
-            demons_have_raid = True
-            demons_raid_timestamp = datetime.now()
-            print("Dämonen haben Raid!")
-            await channel.send("Dämonen haben Raid!")
 
-        if not check_d:
-            demons_have_raid = False
+        # detecting an angel raid can be done 100%, so check it
 
-        if check_a and not angels_have_raid:
+        if detect_raid_angel and not angels_have_raid:        
             angels_have_raid = True
             angels_raid_timestamp = datetime.now()
             print("Engel haben Raid!")
             await channel.send(f"Engel haben Raid!")
 
-        if not check_a:
+        if not detect_raid_angel:
             angels_have_raid = False
+
+        # when checking for demons raid, it can also be lord mukraju
+        # check opposite site to be sure
+
+        if check_d and not demons_have_raid:
+
+            if detect_raid_angel or angel_status("./screenshot_angel.png") is not -1:
+                demons_have_raid = True
+                demons_raid_timestamp = datetime.now()
+                print("Dämonen haben Raid!")
+                await channel.send("Dämonen haben Raid!")
+
+        if not check_d:
+            demons_have_raid = False        
 
         step_counter = step_counter + 1
 
