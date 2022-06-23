@@ -47,14 +47,20 @@ async def on_ready():
     angels_raid_timestamp = datetime.now()
     demons_raid_timestamp = datetime.now()
 
+    step_counter = 0
+
     while True:
         await asyncio.sleep(29)
+        print(f"Checking for raids..{str(step_counter)}")
         check_d = check_for_raid_demons()
         check_a = check_for_raid_angels()
+        print(f"Demons: {str(check_d)}")
+        print(f"Angels: {str(check_a)}")
 
         if check_d and not demons_have_raid:
             demons_have_raid = True
             demons_raid_timestamp = datetime.now()
+            print("Dämonen haben Raid!")
             await channel.send("Dämonen haben Raid!")
 
         if not check_d:
@@ -63,10 +69,13 @@ async def on_ready():
         if check_a and not angels_have_raid:
             angels_have_raid = True
             angels_raid_timestamp = datetime.now()
+            print("Engel haben Raid!")
             await channel.send(f"Engel haben Raid!")
 
         if not check_a:
             angels_have_raid = False
+
+        step_counter = step_counter + 1
 
 @client.event
 async def on_message(message):
