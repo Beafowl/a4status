@@ -21,8 +21,7 @@ def check_for_raid_angels():
 
     with mss() as sct:
         sct.shot(output="screenshot_angel.png")
-        a = angel_status("./screenshot_angel.png")
-        return a == -1
+        return detect_raid_angel("screenshot_angel.png")
 
 def check_for_raid_demons():
 
@@ -60,7 +59,7 @@ async def on_ready():
 
         # detecting an angel raid can be done 100%, so check it
 
-        if detect_raid_angel and not angels_have_raid:        
+        if check_a and not angels_have_raid:        
             angels_have_raid = True
             angels_raid_timestamp = datetime.now()
             print("Engel haben Raid!")
@@ -74,7 +73,7 @@ async def on_ready():
 
         if check_d and not demons_have_raid:
 
-            if detect_raid_angel or angel_status("./screenshot_angel.png") is not -1:
+            if detect_raid_angel or angel_status("./screenshot_angel.png") > -1:
                 demons_have_raid = True
                 demons_raid_timestamp = datetime.now()
                 print("Dämonen haben Raid!")
