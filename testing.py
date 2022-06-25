@@ -1,6 +1,7 @@
 from datetime import datetime
 import asyncio
-from detect import angel_status, demon_status
+from lib.detect import angel_status, demon_status, binarize
+import cv2
 
 async def on_ready(number):
 
@@ -37,8 +38,12 @@ async def on_ready(number):
             angels_have_raid = False
     return True
 
-
-
+def binary_image(imagepath):
+    img = binarize(imagepath)
+    cv2.imshow("Binary", img)
+    cv2.imwrite("binary.png", img)
+    cv2.waitKey(0)
 
 if __name__ == "__main__":
-    asyncio.run(on_ready(6))
+    #asyncio.run(on_ready(6))
+    binary_image("samples/image6.jpg")

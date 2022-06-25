@@ -1,5 +1,5 @@
 import discord
-from detect import angel_status, demon_status, detect_raid_angel
+from lib.detect import detect_raid_angel, detect_raid_demon, angel_status, demon_status
 import os
 from dotenv import load_dotenv, find_dotenv
 from mss import mss
@@ -27,8 +27,7 @@ def check_for_raid_demons():
 
     with mss() as sct:
         sct.shot(output="screenshot_demon.png")
-        d = demon_status("./screenshot_demon.png")
-        return d == -1
+        return detect_raid_demon("screenshot_demon.png")
 
 @client.event
 async def on_ready():
@@ -50,16 +49,10 @@ async def on_ready():
 
     while True:
         await asyncio.sleep(29)
-        print(f"Checking for raids..{str(step_counter)}")
-        check_d = check_for_raid_demons()
-        check_a = check_for_raid_angels()
-        print(f"Demons: {str(check_d)}")
-        print(f"Angels: {str(check_a)}")
-
 
         # detecting an angel raid can be done 100%, so check it
 
-        if check_a and not angels_have_raid:        
+        if check_for_raid_angels() and not angels_have_raid:        
             angels_have_raid = True
             angels_raid_timestamp = datetime.now()
             print("Engel haben Raid!")
@@ -71,18 +64,13 @@ async def on_ready():
         # when checking for demons raid, it can also be lord mukraju
         # check opposite site to be sure
 
-        if check_d and not demons_have_raid:
-
-            if detect_raid_angel or angel_status("./screenshot_angel.png") > -1:
-                demons_have_raid = True
-                demons_raid_timestamp = datetime.now()
-                print("Dämonen haben Raid!")
-                await channel.send("Dämonen haben Raid!")
-
-        if not check_d:
-            demons_have_raid = False        
-
-        step_counter = step_counter + 1
+        if check_for_raid_demons() and not demons_have_raid:
+            demons_have_raid = True
+            demons_raid_timestamp = datetime.now()
+            print("Dämonen haben Raid!")
+            await channel.send("Dämonen haben Raid!")
+        if not detect_raid_demon:
+            demons_have_raid = False
 
 @client.event
 async def on_message(message):
