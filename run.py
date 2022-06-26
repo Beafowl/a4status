@@ -93,6 +93,12 @@ async def on_message(message):
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
 
+            if a == -1:
+                angels_text = f"Irgendwas ist bei Auslesen der Engel schiefgelaufen. Einmal Alamad Bescheid geben"
+
+            if d == -1:
+                demons_text = f"Irgendwas ist bei Auslesen der Dämonen schiefgelaufen. Einmal Alamad Bescheid geben"
+
             #print(angels_text)
             #print(demons_text)
             await message.channel.send(angels_text)
