@@ -83,12 +83,12 @@ async def on_message(message):
             demons_text = ""
             angels_text = ""
 
-            if a == -1:
+            if check_for_raid_angels():
                 angels_text = f"""Die Engel haben gerade Raid!\n\nEs hat um {angels_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(angels_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(angels_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 angels_text = "Die Engel sind bei " + str(a) + "%."
 
-            if d == -1:
+            if check_for_raid_demons():
                 demons_text = f"""Die Dämonen haben gerade Raid!\n\nEs hat um {demons_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(demons_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(demons_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
