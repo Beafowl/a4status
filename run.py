@@ -1,5 +1,5 @@
 import discord
-from lib.detect import detect_raid_angel, detect_raid_demon, angel_status, demon_status
+from detect import detect_raid_angel, detect_raid_demon, angel_status, demon_status
 import os
 from dotenv import load_dotenv, find_dotenv
 from mss import mss

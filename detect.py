@@ -155,7 +155,7 @@ def detect_raid_angel(imagepath):
 
     # check first digit from left. if no digit detected, raid started
     sum = 0
-    pattern_image = cv2.imread("pattern/angel_raid.png")
+    pattern_image = cv2.imread("pattern/angels_raid.png")
     height_p, width_p, channels_p = pattern_image.shape
     for x in range(0, width_p):
         for y in range(0, height_p):
