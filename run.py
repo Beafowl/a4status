@@ -126,6 +126,4 @@ async def on_message(message):
         await message.channel.send(file=discord.File('./output/debug.png'))
 
 if __name__ == "__main__":
-    print_with_timestamp("Hallo")
-    exit(0)
     client.run(os.environ.get("TOKEN"))
