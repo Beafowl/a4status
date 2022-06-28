@@ -29,9 +29,14 @@ def check_for_raid_demons():
         sct.shot(output="screenshot_demon.png")
         return detect_raid_demon("screenshot_demon.png")
 
+def print_with_timestamp(string):
+    current_time = datetime.now()
+    print(f"[{current_time.hour}:{current_time.second}] {string}")
+
+
 @client.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print_with_timestamp(f'{client.user} has connected to Discord!')
 
     # get channel
     channel = await client.fetch_channel(channel_id)
@@ -55,7 +60,7 @@ async def on_ready():
         if check_for_raid_angels() and not angels_have_raid:        
             angels_have_raid = True
             angels_raid_timestamp = datetime.now()
-            print("Engel haben Raid!")
+            print_with_timestamp("Engel haben Raid!")
             await channel.send(f"Engel haben Raid!")
 
         if not detect_raid_angel:
@@ -67,7 +72,7 @@ async def on_ready():
         if check_for_raid_demons() and not demons_have_raid:
             demons_have_raid = True
             demons_raid_timestamp = datetime.now()
-            print("Dämonen haben Raid!")
+            print_with_timestamp("Dämonen haben Raid!")
             await channel.send("Dämonen haben Raid!")
         if not detect_raid_demon:
             demons_have_raid = False
@@ -93,10 +98,10 @@ async def on_message(message):
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
 
-            if a == -1:
+            if a == -1 and not check_for_raid_angels():
                 angels_text = f"Irgendwas ist bei Auslesen der Engel schiefgelaufen. Einmal Alamad Bescheid geben"
 
-            if d == -1:
+            if d == -1 and not check_for_raid_angels():
                 demons_text = f"Irgendwas ist bei Auslesen der Dämonen schiefgelaufen. Einmal Alamad Bescheid geben"
 
             #print(angels_text)
@@ -121,4 +126,6 @@ async def on_message(message):
         await message.channel.send(file=discord.File('./output/debug.png'))
 
 if __name__ == "__main__":
+    print_with_timestamp("Hallo")
+    exit(0)
     client.run(os.environ.get("TOKEN"))
