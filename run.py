@@ -79,6 +79,14 @@ async def on_message(message):
             demons_text = ""
             angels_text = ""
 
+            # debug print
+
+            #print(a)
+            #print(check_for_raid_angels())
+            #print(d)
+            #print(check_for_raid_demons())
+
+
             if check_for_raid_angels():
                 angels_text = "Die Engel haben gerade Raid!"
             else:
@@ -92,7 +100,7 @@ async def on_message(message):
             if a == -1 and not check_for_raid_angels():
                 angels_text = f"Irgendwas ist bei Auslesen der Engel schiefgelaufen. Einmal Alamad Bescheid geben"
 
-            if d == -1 and not check_for_raid_angels():
+            if d == -1 and not check_for_raid_demons():
                 demons_text = f"Irgendwas ist bei Auslesen der Dämonen schiefgelaufen. Einmal Alamad Bescheid geben"
 
             #print(angels_text)
