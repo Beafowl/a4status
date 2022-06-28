@@ -44,14 +44,6 @@ async def on_ready():
     demons_have_raid = False
     angels_have_raid = False
 
-    global angels_raid_timestamp
-    global demons_raid_timestamp
-
-    angels_raid_timestamp = datetime.now()
-    demons_raid_timestamp = datetime.now()
-
-    step_counter = 0
-
     while True:
         await asyncio.sleep(29)
 
@@ -71,7 +63,6 @@ async def on_ready():
 
         if check_for_raid_demons() and not demons_have_raid:
             demons_have_raid = True
-            demons_raid_timestamp = datetime.now()
             print_with_timestamp("Dämonen haben Raid!")
             await channel.send("Dämonen haben Raid!")
         if not detect_raid_demon:
@@ -89,12 +80,12 @@ async def on_message(message):
             angels_text = ""
 
             if check_for_raid_angels():
-                angels_text = f"""Die Engel haben gerade Raid!\n\nEs hat um {angels_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(angels_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(angels_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
+                angels_text = "Die Engel haben gerade Raid!"
             else:
                 angels_text = "Die Engel sind bei " + str(a) + "%."
 
             if check_for_raid_demons():
-                demons_text = f"""Die Dämonen haben gerade Raid!\n\nEs hat um {demons_raid_timestamp.strftime("%H:%M")} angefangen.\nDer Raid öffnet um {(demons_raid_timestamp + timedelta(minutes=20)).strftime("%H:%M")},\nund man hat bis {(demons_raid_timestamp + timedelta(minutes=50)).strftime("%H:%M")} Zeit."""
+                demons_text = "Die Dämonen haben gerade Raid!"
             else:
                 demons_text = "Die Dämonen sind bei " + str(d) + "%."
 
