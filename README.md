@@ -1,6 +1,10 @@
 Prerequisites for the image:
-* Resolution has to be 1024x768
+* The resolution of the OS has to be 1024x768
+* Game needs to be set to fullscreen borderless
 * Image needs to contain the game only
 
 Prerequisites for the server:
-* pythons
+* python
+
+Prerequisites for the discord bot:
+* Enable message content intent
