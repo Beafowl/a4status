@@ -1,15 +1,14 @@
 from detect import angel_status, demon_status, detect_raid_angel, detect_raid_demon
 from mss import mss
-from http.server import HTTPServer, BaseHTTPRequestHandler
-
 from flask import Flask
+import json
 
 HOST = "0.0.0.0"
 PORT = 80
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/a4status')
 def index():
     # first do a screenshot and get both statuses
     with mss() as sct:
@@ -31,12 +30,18 @@ def index():
                 a_value = "Ein Fehler ist aufgetreten."
 
         if d_value == -1:
-            d_status = detect_raid_angel('./screenshot.png')
+            d_status = detect_raid_demon('./screenshot.png')
             if d_status:
                 d_value = "Das Tor zur Raidhöhle ist offen!"
             else:
                 d_value = "Ein Fehler ist aufgetreten."
-    return f"Angels: {a_value}\nDemons: {d_value}"
+    
+    a4_status = {
+
+        "angel_status": a_value,
+        "demon_status": d_value
+    }
+    return json.dumps(a4_status)
 
 if __name__ == "__main__":
     app.run(host=HOST, port=PORT)

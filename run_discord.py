@@ -48,12 +48,6 @@ async def on_ready():
     while True:
         await asyncio.sleep(29)
 
-        # serialize the status to json and save it to a file
-
-        #status_object = f'"angel_status": {angel_status('./screenshot_angel.png')}, "demon_status": {demon_status('./screenshot_demon.png')}'
-
-        #status_object_json = json.loads(status_object)
-
         # detecting an angel raid can be done 100%, so check it
 
         if check_for_raid_angels() and not angels_have_raid:        
