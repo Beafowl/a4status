@@ -84,11 +84,11 @@ def main():
             opened_demons = now
 
         closing_time_demons = opened_demons + timedelta(minutes=60)
-        minutes_left_demons = divmod((opened_demons - now).total_seconds(), 60)[0]
+        minutes_left_demons = divmod((closing_time_demons - now).total_seconds(), 60)[0] + 1
         a4status["demons"]["closes_in"] = minutes_left_demons
 
         closing_time_angels = opened_angels + timedelta(minutes=60)
-        minutes_left_angels = divmod((opened_angels - now).total_seconds(), 60)[0]
+        minutes_left_angels = divmod((closing_time_angels - now).total_seconds(), 60)[0] + 1
         a4status["angels"]["closes_in"] = minutes_left_angels
 
         # save into a json file
