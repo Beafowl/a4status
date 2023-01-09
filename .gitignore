@@ -4,6 +4,9 @@ screenshot_angel.png
 screenshot_demon.png
 output/*
 
+# output of the local api server
+data.json
+
 # Editors
 .vscode/
 .idea/

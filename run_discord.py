@@ -21,14 +21,14 @@ channel_id = str(os.environ.get("CHANNEL"))
 def check_for_raid_angels():
 
     with mss() as sct:
-        sct.shot(output="screenshot_angel.png")
-        return detect_raid_angel("screenshot_angel.png")
+        screenshot_angel = sct.shot()
+        return detect_raid_angel(screenshot_angel)
 
 def check_for_raid_demons():
 
     with mss() as sct:
-        sct.shot(output="screenshot_demon.png")
-        return detect_raid_demon("screenshot_demon.png")
+        screenshot_demon = sct.shot()
+        return detect_raid_demon(screenshot_demon)
 
 def print_with_timestamp(string):
     current_time = datetime.now()
@@ -71,9 +71,9 @@ async def on_ready():
 async def on_message(message):
     if message.content == "!a4" or message.content == "!status":
         with mss() as sct:
-            sct.shot(output="screenshot.png")
-            a = angel_status("./screenshot.png")
-            d = demon_status("./screenshot.png")
+            screenshot = sct.shot()
+            a = angel_status(screenshot)
+            d = demon_status(screenshot)
         
             demons_text = ""
             angels_text = ""
