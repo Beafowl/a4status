@@ -31,12 +31,12 @@ def demon_status(imagepath):
 
     # debug output
     
-    cv2.imwrite("output/demon.png", image_demon)
+    cv2.imwrite("../output/demon.png", image_demon)
 
     # check first digit from left. if no digit detected, raid started
     for pattern in range(0, 10):
         sum = 0
-        pattern_image = cv2.imread("pattern/" + str(pattern) + ".png")
+        pattern_image = cv2.imread("../pattern/" + str(pattern) + ".png")
         height_p, width_p, channels_p = pattern_image.shape
         for x in range(0, width_p):
             for y in range(0, height_p):
@@ -56,7 +56,7 @@ def demon_status(imagepath):
 
     for pattern in range(0, 10):
         sum = 0
-        pattern_image = cv2.imread("pattern/" + str(pattern) + ".png")
+        pattern_image = cv2.imread("../pattern/" + str(pattern) + ".png")
         height_p, width_p, channels_p = pattern_image.shape
         for x in range(0, width_p):
             for y in range(0, height_p):
@@ -95,12 +95,12 @@ def angel_status(imagepath):
 
     # debug output
     
-    cv2.imwrite("output/angel.png", image_angel)
+    cv2.imwrite("../output/angel.png", image_angel)
 
     # check first digit from left. if no digit detected, raid started
     for pattern in range(0, 10):
         sum = 0
-        pattern_image = cv2.imread("pattern/" + str(pattern) + ".png")
+        pattern_image = cv2.imread("../pattern/" + str(pattern) + ".png")
         height_p, width_p, channels_p = pattern_image.shape
         for x in range(0, width_p):
             for y in range(0, height_p):
@@ -120,7 +120,7 @@ def angel_status(imagepath):
 
     for pattern in range(0, 10):
         sum = 0
-        pattern_image = cv2.imread("pattern/" + str(pattern) + ".png")
+        pattern_image = cv2.imread("../pattern/" + str(pattern) + ".png")
         height_p, width_p, channels_p = pattern_image.shape
         for x in range(0, width_p):
             for y in range(0, height_p):
@@ -141,7 +141,7 @@ def detect_raid_angel(imagepath):
 
     # original image
     image = cv2.imread(imagepath)
-    pattern_image = cv2.imread("pattern/raid.png")
+    pattern_image = cv2.imread("../pattern/raid.png")
     height_p, width_p, channels_p = pattern_image.shape
 
     # 434 751, 434 758, 454 751, 454 758
@@ -156,7 +156,7 @@ def detect_raid_angel(imagepath):
                     image_angel[y,x] = [ 0, 0, 0]
 
     # debug output
-    cv2.imwrite("output/angel.png", image_angel)
+    cv2.imwrite("../output/angel.png", image_angel)
 
     # check first digit from left. if no digit detected, raid started
     sum = 0
@@ -184,7 +184,7 @@ def detect_raid_demon(imagepath):
 
     # original image
     image = cv2.imread(imagepath)
-    pattern_image = cv2.imread("pattern/raid.png")
+    pattern_image = cv2.imread("../pattern/raid.png")
     height_p, width_p, channels_p = pattern_image.shape
 
 
@@ -201,7 +201,7 @@ def detect_raid_demon(imagepath):
 
     # debug output
     
-    cv2.imwrite("output/demon.png", image_demon)
+    cv2.imwrite("../output/demon.png", image_demon)
 
     # check first digit from left. if no digit detected, raid started
     sum = 0
@@ -213,14 +213,14 @@ def detect_raid_demon(imagepath):
 
 if __name__ == "__main__":
 
-    print(detect_raid_angel("samples/image10.png"))
-    print(detect_raid_demon("samples/image9.png"))
+    print(detect_raid_angel("../samples/image10.png"))
+    print(detect_raid_demon("../samples/image9.png"))
 
 
     exit(0)
 
     for i in range(1, 9):
         print("image" + str(i) + ":")
-        print(demon_status("samples/image" + str(i) + ".jpg"))
-        print(angel_status("samples/image" + str(i) + ".jpg"))
+        print(demon_status("../samples/image" + str(i) + ".jpg"))
+        print(angel_status("../samples/image" + str(i) + ".jpg"))
         print("-------------------------")

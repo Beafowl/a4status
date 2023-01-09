@@ -19,44 +19,45 @@ a4status = {
 
     "angels": {
         "percentage": 0,
-        "opened": datetime.now(),
         "closes_in": 0
     },
     "demons": {
         "percentage": 0,
-        "opened": datetime.now(),
         "closes_in": 0
     }
 }
 
-raid_already_detected_demons = False
-raid_already_detected_angels = False
-
 def main():
+
+
+    raid_already_detected_demons = False
+    raid_already_detected_angels = False
+    opened_demons = datetime.now()
+    opened_angels = datetime.now()
 
     while 1:
         now = datetime.now()
         # first do a screenshot and get both statuses
         with mss() as sct:
-            screenshot = sct.shot()
+            sct.shot(output="screenshot.png")
 
             # angel status and demon status can detect the values of the counter, but not the actual raid
 
-            a_value = angel_status(screenshot)
-            d_value = demon_status(screenshot)
+            a_value = angel_status("./screenshot.png")
+            d_value = demon_status("./screenshot.png")
 
             # for that we need detect raid angel and detect raid demon
             # they return true if there is a raid and false else 
 
             if a_value == -1:
-                a_status = detect_raid_angel(screenshot)
+                a_status = detect_raid_angel('./screenshot.png')
                 if a_status:
                     a_value = 100
                 else:
                     a_value = -1
 
             if d_value == -1:
-                d_status = detect_raid_demon(screenshot)
+                d_status = detect_raid_demon('./screenshot.png')
                 if d_status:
                     d_value = 100
                 else:
@@ -75,25 +76,25 @@ def main():
 
         if a_value == 100 and not raid_already_detected_angels:
             raid_already_detected_angels = True
-            a4status["angels"]["opened"] = now
+            opened_angels = now
 
 
         if d_value == 100 and not raid_already_detected_demons:
             raid_already_detected_demons = True
-            a4status["demons"]["opened"] = now
+            opened_demons = now
 
-        closing_time_demons = a4status["demons"]["opened"] + timedelta(minutes=60)
-        minutes_left_demons = divmod((closing_time_demons - now).total_seconds(), 60)[0]
-        a4status["demons"]["closes_in"] = minutes_left_demons + 1
+        closing_time_demons = opened_demons + timedelta(minutes=60)
+        minutes_left_demons = divmod((opened_demons - now).total_seconds(), 60)[0]
+        a4status["demons"]["closes_in"] = minutes_left_demons
 
-        closing_time_angels = a4status["angels"]["opened"] + timedelta(minutes=60)
-        minutes_left_angels = divmod((closing_time_angels - now).total_seconds(), 60)[0]
-        a4status["angels"]["closes_in"] = minutes_left_angels + 1
+        closing_time_angels = opened_angels + timedelta(minutes=60)
+        minutes_left_angels = divmod((opened_angels - now).total_seconds(), 60)[0]
+        a4status["angels"]["closes_in"] = minutes_left_angels
 
         # save into a json file
 
-        with open("data.json", "w") as outfile:
-            outfile.write(json.dumps(a4status, indent=4, cls=DateTimeEncoder))
+        with open("data.json", "w", encoding='utf-8') as outfile:
+            json.dump(a4status, outfile, indent=4, ensure_ascii=False)
         time.sleep(29)
 
 
