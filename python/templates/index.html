@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='background_styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css')}}">
+    <script src="{{ url_for('static', filename='script.js')}}" defer></script>
+    <title>Progress Bar</title>
+  </head>
+  <body>
+    <div class="progress-bar" style="--width: 0; margin-right: 100px; --gradientColor1: #af99b0; --gradientColor2: #bfacc0;" data-label="Loading..."></div>
+    <div class="progress-bar" style="--width: 0" data-label="Loading..."></div>
+  </body>
+</html>
