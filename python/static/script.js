@@ -32,7 +32,7 @@ const updateWebpage = (dataObject) => {
 
     } else {
 
-        dataObject.angels.percentage = (dataObject.angels.closes_in / 60) * 100;
+        dataObject.angels.percentage = Math.floor((dataObject.angels.closes_in / 60) * 100);
         progressBarAngels.style.setProperty('--width', dataObject.angels.percentage);
         progressBarAngels.style.setProperty('--gradientColor1', '#ff9400')
         progressBarAngels.style.setProperty('--gradientColor2', '#ffa200')
@@ -47,7 +47,7 @@ const updateWebpage = (dataObject) => {
         progressBarDemons.style.setProperty('--gradientColor2', '#bfacc0')
     } else {
 
-        dataObject.demons.percentage = (dataObject.demons.closes_in / 60) * 100;
+        dataObject.demons.percentage = Math.floor((dataObject.demons.closes_in / 60) * 100);
         progressBarDemons.style.setProperty('--width', dataObject.demons.percentage);
         progressBarDemons.style.setProperty('--gradientColor1', '#ff9400')
         progressBarDemons.style.setProperty('--gradientColor2', '#ffa200')
