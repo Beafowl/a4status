@@ -5,6 +5,7 @@ Prerequisites for the image:
 
 Prerequisites for the server:
 * python
+* gunicorn
 
 Prerequisites for the discord bot:
 * Enable message content intent

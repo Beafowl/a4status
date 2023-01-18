@@ -4,6 +4,8 @@ screenshot_angel.png
 screenshot_demon.png
 output/*
 
+.env*
+
 # output of the local api server
 data.json
 
