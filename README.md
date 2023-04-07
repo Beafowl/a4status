@@ -14,3 +14,7 @@ Prerequisites for the OS
 * Enabling the use of port 80 for flask (example is for python 3.8)
 sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.8
 * Check the installed versions of python with ls /usr/bin | grep python
+
+Prerequisites for the VM
+* python
+* Run as administrator

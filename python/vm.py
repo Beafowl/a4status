@@ -1,9 +1,14 @@
 from pywinauto import findwindows, keyboard, Application, mouse
-import socket
+from flask import Flask
 
-ADDRESS = '127.0.0.1'
-PORT = 1337
+# pywinauto only works for windows
 
+HOST = '127.0.0.1'
+PORT = 5555
+
+app = Flask(__name__)
+
+@app.route('/close_nostale')
 def close_nostale():
 
     window_handle = findwindows.find_windows(title_re="NosTale")[0]
@@ -14,7 +19,9 @@ def close_nostale():
 
     keyboard.send_keys('%{F4}')
     keyboard.send_keys('{ENTER}')
+    return "Game has been closed"
 
+@app.route('/start_nostale')
 def start_nostale():
 
     window_handle = findwindows.find_windows(title_re="Gameforge")[0]
@@ -31,16 +38,12 @@ def start_nostale():
     keyboard.send_keys('{TAB}')
     keyboard.send_keys('{ENTER}')
 
+    return "Game has been started"
+
+@app.route('/goto_game')
 def goto_game():
     pass
+    return "Server has been selected"
 
-def listen():
-    server_socket =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((ADDRESS, PORT))
-    server_socket.listen()
-    print(f'Listening on {ADDRESS}:{PORT}')
-    while True:
-        (client_socket, addr) = server_socket.accept()
-        print(client_socket.recv(1024))
-
-listen()
+if __name__ == '__main__':
+    app.run(host=HOST, port=PORT)
