@@ -51,7 +51,7 @@ body {
 }
 
 .progress-bar::before {
-	content: attr(data-label);
+    content: attr(data-label);
 	display: flex;
 	align-items: center;
 	position: absolute;
