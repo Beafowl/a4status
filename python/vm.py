@@ -1,5 +1,7 @@
 from pywinauto import findwindows, keyboard, Application, mouse
 from flask import Flask
+import flask
+import win32api
 
 # pywinauto only works for windows
 
@@ -44,6 +46,12 @@ def start_nostale():
 def goto_game():
     pass
     return "Server has been selected"
+
+@app.route('/get_mouse_position')
+def get_mouse_position():
+    x, y = win32api.GetCursorPos()
+    return flask.jsonify({ x: x, y: y})
+
 
 if __name__ == '__main__':
     app.run(host=HOST, port=PORT)

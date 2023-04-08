@@ -17,4 +17,5 @@ sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.8
 
 Prerequisites for the VM
 * python
-* Run as administrator
+* Run as administrator (script and the game)
+* Set network adapter to bridge
