@@ -7,12 +7,12 @@ import time
 # this code will be run on the virtual machine
 # create a an api server to control the state of the game
 
-# positions of the mouse
+# positions of the mouse. Tuple has form (y,x)
 
-SELECT_SERVER = (283, 473)
-SELECT_CHANNEL_7 = (443, 704)
-SELECT_CHARACTER = (56, 205)
-CLOSE_NOSMALL = (735, 953)
+SELECT_SERVER = (473, 283)
+SELECT_CHANNEL_7 = (704, 443)
+SELECT_CHARACTER = (205, 56)
+CLOSE_NOSMALL = (953, 735)
 
 # estimated times for transitioning to the next state (in seconds)
 
@@ -78,7 +78,7 @@ def goto_game():
 # the automated script
 @app.route('/get_mouse_position')
 def get_mouse_position():
-    x, y = win32api.GetCursorPos()
+    y, x = win32api.GetCursorPos()
     return flask.jsonify({ "x": x, "y": y})
 
 @app.route('/test')
