@@ -3,6 +3,12 @@ from mss import mss
 import json
 import time
 from datetime import datetime, date, timedelta
+import requests
+
+HOST = "192.168.178.141"
+PORT = 5555
+
+checked_for_lord_mukraju = False
 
 # subclass JSONEncoder
 # for serializing date to json
@@ -28,7 +34,6 @@ a4status = {
 }
 
 def main():
-
 
     raid_already_detected_demons = False
     raid_already_detected_angels = False
@@ -92,11 +97,26 @@ def main():
         a4status["angels"]["closes_in"] = minutes_left_angels
 
         # save into a json file
-
         with open("data.json", "w", encoding='utf-8') as outfile:
             json.dump(a4status, outfile, indent=4, ensure_ascii=False)
-        time.sleep(29)
 
+        # logic for restarting the game in case of an error
+
+        if a4status["angels"]["percentage"] == -1 and a4status["demons"]["percentage"] == -1:
+            if not checked_for_lord_mukraju:
+                # first assume lord mukraju, restart and wait for 60 seconds
+                checked_for_lord_mukraju = True
+                requests.get(f'http://{HOST}:{PORT}/restart_game?type=mukraju')
+                time.sleep(1*60+5)
+                continue
+            else:
+                # we will be here in the second run, so we can assume maintenance
+                requests.get(f'http://{HOST}:{PORT}/restart_game?type=maintenance')
+                time.sleep(30*60+5)
+                continue
+
+        checked_for_lord_mukraju = False
+        time.sleep(29)
 
 if __name__ == "__main__":
     main()
