@@ -79,8 +79,12 @@ def goto_game():
 @app.route('/get_mouse_position')
 def get_mouse_position():
     x, y = win32api.GetCursorPos()
-    return flask.jsonify({ x: x, y: y})
+    return flask.jsonify({ "x": x, "y": y})
 
+@app.route('/test')
+def testing():
+    mouse.move(coords=(283,472))
+    return "Test"
 
 if __name__ == '__main__':
     app.run(host=HOST, port=PORT)
