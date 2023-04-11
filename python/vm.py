@@ -100,13 +100,14 @@ def testing():
 def restart_game_task(restart_type):
 
     restart_type = request.args.get('type')
+    
+    close_game()
 
     if restart_type == 'mukraju':
         wait_randomly(60)
     elif restart_type == 'maintenance':
         wait_randomly(30*60)
-    
-    close_game()
+
     wait_randomly(TIME_CLOSE_NOSTALE)
     start_game()
     wait_randomly(TIME_START_NOSTALE)
