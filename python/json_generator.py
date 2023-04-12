@@ -40,6 +40,9 @@ def main():
     opened_demons = datetime.now()
     opened_angels = datetime.now()
 
+    print("Waiting for setup...")
+    time.sleep(30)
+
     while 1:
         now = datetime.now()
         # first do a screenshot and get both statuses
