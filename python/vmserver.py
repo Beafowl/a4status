@@ -1,19 +1,23 @@
 from pywinauto import findwindows, keyboard, Application, mouse
 from flask import Flask, copy_current_request_context, request
-from flask_restful import Resource, Api
+from waitress import serve
 import flask
 import win32api
 import time
 import random
 import threading
+import os
+from dotenv import load_dotenv, find_dotenv
 
 # this code will be run on the virtual machine
 # create a an api server to control the state of the game
 
 # pywinauto only works for windows
 
-HOST = '127.0.0.1'
-PORT = 5555
+config = load_dotenv(find_dotenv())
+
+HOST = os.environ.get('VM_HOST')
+PORT = os.environ.get('VM_PORT')
 
 # positions of the mouse. Tuple has form (y,x)
 
@@ -36,7 +40,6 @@ def wait_randomly(t):
     time.sleep(t + random.uniform(0.0, 5.0))
 
 app = Flask(__name__)
-api = Api(app)
 
 @app.route('/close_game')
 def close_game():
@@ -126,4 +129,5 @@ def restart_game():
     
 
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT)
+    #app.run(host=HOST, port=PORT)
+    serve(app, host=HOST, port=PORT)

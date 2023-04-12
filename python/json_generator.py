@@ -4,9 +4,13 @@ import json
 import time
 from datetime import datetime, date, timedelta
 import requests
+from dotenv import load_dotenv, find_dotenv
+import os
 
-HOST = "192.168.178.141"
-PORT = 5555
+config = load_dotenv(find_dotenv())
+
+HOST = os.environ.get('VM_HOST')
+PORT = os.environ.get('VM_PORT')
 
 checked_for_lord_mukraju = False
 
@@ -22,7 +26,6 @@ class DateTimeEncoder(json.JSONEncoder):
 # percentage: 0-99 is actual percentage, 100 is open, -1 is error
 # closes_in is in minutes, an integer is enough
 a4status = {
-
     "angels": {
         "percentage": 0,
         "closes_in": 0

@@ -1,6 +1,4 @@
 import cv2
-import requests
-from mss import mss
 
 TOLERANCE = 10
 

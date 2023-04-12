@@ -1,0 +1,17 @@
+# template of a .env file
+# replace values with real values and rename to .env for deployment
+# do not add white space to key value pairs
+
+# apiserver
+# the apiserver hosts the website and provides an api to the json which contains the percentages
+APISERVER_HOST='IP of the api server'
+APISERVER_PORT='Port of the api server'
+
+# discord
+CHANNEL='Channel where the discord bot should listen and chat to'
+TOKEN='Token of the discord bot'
+
+# vm api
+# the vm hosts an api server to control the game
+VM_HOST='IP of the VM'
+VM_PORT='Port of the VM'
