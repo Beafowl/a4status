@@ -1,5 +1,6 @@
 from pywinauto import findwindows, keyboard, Application, mouse
-from flask import Flask, request
+from flask import Flask, copy_current_request_context, request
+from flask_restful import Resource, Api
 import flask
 import win32api
 import time
@@ -11,7 +12,7 @@ import threading
 
 # pywinauto only works for windows
 
-HOST = '192.168.178.141'
+HOST = '127.0.0.1'
 PORT = 5555
 
 # positions of the mouse. Tuple has form (y,x)
@@ -35,6 +36,7 @@ def wait_randomly(t):
     time.sleep(t + random.uniform(0.0, 5.0))
 
 app = Flask(__name__)
+api = Api(app)
 
 @app.route('/close_game')
 def close_game():
@@ -96,23 +98,6 @@ def testing():
     mouse.move(coords=(283,472))
     return "Test"
 
-# task in order to execute this in parallel
-def restart_game_task(restart_type):
-
-    restart_type = request.args.get('type')
-    
-    close_game()
-
-    if restart_type == 'mukraju':
-        wait_randomly(60)
-    elif restart_type == 'maintenance':
-        wait_randomly(30*60)
-
-    wait_randomly(TIME_CLOSE_NOSTALE)
-    start_game()
-    wait_randomly(TIME_START_NOSTALE)
-    goto_game()
-
 # /restart_game?type=mukraju/maintenance
 # in case of mukraju: Wait for 60 seconds before restarting the game, else wait for 30 mins
 @app.route('/restart_game')
@@ -120,9 +105,28 @@ def restart_game():
 
     restart_type = request.args.get('type')
 
+    # task in order to execute this in parallel
+    @copy_current_request_context
+    def restart_game_task(restart_type):
+
+        restart_type = request.args.get('type')
+        
+        close_game()
+
+        if restart_type == 'mukraju':
+            wait_randomly(60)
+        elif restart_type == 'maintenance':
+            wait_randomly(30*60)
+
+        wait_randomly(TIME_CLOSE_NOSTALE)
+        start_game()
+        wait_randomly(TIME_START_NOSTALE)
+        goto_game()
+
     threading.Thread(target=restart_game_task, args=(restart_type,)).start()
 
     return "Execution for restarting game has been started"
+    
 
 if __name__ == '__main__':
     app.run(host=HOST, port=PORT)
