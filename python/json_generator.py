@@ -106,12 +106,12 @@ def main():
             if not checked_for_lord_mukraju:
                 # first assume lord mukraju, restart and wait for 60 seconds
                 checked_for_lord_mukraju = True
-                requests.get(f'http://{HOST}:{PORT}/restart_game?type=mukraju')
+                requests.get(f'http://{HOST}:{PORT}/restart_game?duration=60')
                 time.sleep(1*60+5)
                 continue
             else:
                 # we will be here in the second run, so we can assume maintenance
-                requests.get(f'http://{HOST}:{PORT}/restart_game?type=maintenance')
+                requests.get(f'http://{HOST}:{PORT}/restart_game?duration=1800')
                 time.sleep(30*60+5)
                 continue
 

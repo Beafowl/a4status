@@ -27,7 +27,7 @@ CLOSE_NOSMALL = (953, 735)
 
 TIME_START_NOSTALE = 30
 TIME_TO_CHARACTER_SELECTION = 5
-TIME_TO_GAME = 10
+TIME_TO_GAME = 15
 TIME_CLOSE_NOSTALE = 10
 
 # waits an additional random time between 0 and 5 seconds in order to have
@@ -107,16 +107,13 @@ def restart_game():
 
     # task in order to execute this in parallel
     @copy_current_request_context
-    def restart_game_task(restart_type):
+    def restart_game_task(duration):
 
-        restart_type = request.args.get('type')
+        duration = float(request.args.get('duration'))
         
         close_game()
 
-        if restart_type == 'mukraju':
-            wait_randomly(60)
-        elif restart_type == 'maintenance':
-            wait_randomly(30*60)
+        wait_randomly(duration)
 
         wait_randomly(TIME_CLOSE_NOSTALE)
         start_game()
