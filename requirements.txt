@@ -3,3 +3,5 @@ mss
 python-dotenv
 nest-asyncio
 discord
+waitress
+flask
